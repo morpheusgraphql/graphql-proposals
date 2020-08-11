@@ -127,12 +127,14 @@ query:
 result:
 
 ```json
-{ "data":
-  "users":[
-    ["jkgadagiu",{"name": "Alex"}],
-    ["t9t98z9on",{"name": "David"}],
-    ["87t8biuhou",{"name": "George"}]
-  ]
+{
+  "data": {
+    "users": [
+      ["jkgadagiu", { "name": "Alex" }],
+      ["t9t98z9on", { "name": "David" }],
+      ["87t8biuhou", { "name": "George" }]
+    ]
+  }
 }
 ```
 
