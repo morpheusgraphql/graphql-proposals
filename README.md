@@ -1,21 +1,37 @@
 # graphql-proposal-custom-wrapper-type
 
-## Inro
-
-```graphql
-wrapper NonEmpty a = [a]
-wrapper Set a = [a]
-wrapper Entry a = (ID!, a)
-wrapper Map a = [Entry a]
-```
-
 ## Syntax
 
-```gql
+```graphql
 wrapper Name<a> = [a]
 ```
 
-### restrictions
+- WrapperDefinition:
+
+  - Description(opt) __wrapper__ Name **<** Name **>** = WrapperDefinitionBody
+
+- WrapperDefinitionBody:
+  - Name
+  - [WrapperDefinitionBody]
+  - ( VectorArgument(list), WrapperDefinitionBody)
+  - Name **<** WrapperDefinitionBody **>**
+
+- VectorArgument:
+
+  - EnumTypeDefinition
+  - ScalarTypeDefinition
+  - WrapperDefinition
+
+e.g
+
+```graphql
+wrapper NonEmpty<a> = [a]
+wrapper Set<a> = [a]
+wrapper Entry<a> = (ID!, a)
+wrapper Map<a> = [Entry a]
+```
+
+### Semantics
 
 - custom wrypper can be used as `Input` and `Output` types
 - custom wrapper has `kind` `WRAPPER`
@@ -52,16 +68,18 @@ wrapper Name<a> = [a]
 - scalars and enums and custom wrappers can be used in wrapper. e.g
 
   ```graphql
-  wrapper Entry a = (ID!, a)
-  wrapper Map a = [Entry a]
+  wrapper Entry<a> = (ID!, a)
+  wrapper Map<a> = [Entry a]
   ```
 
 ## Parsing and Validation
 
 server must define serialization methods for wrappers.
 
+
+
 ```graphql
-wrapper NonEmpty a = [a]
+wrapper NonEmpty<a> = [a]
 ```
 
 **haskell**
