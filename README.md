@@ -164,7 +164,7 @@ type __Type {
   inputFields: [__InputValue!]
 
   # For Wrappper Arguments
-  wrapperTypes: [__Type]
+  wrapperTypes: [__Type!]
 
   # Wrappers Only:  NON_NULL , LIST, CUSTOM_WRAPPER
   ofType: __Type
