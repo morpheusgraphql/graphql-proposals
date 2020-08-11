@@ -102,7 +102,7 @@ type User {
 }
 
 type Query {
-  users : Map
+  users : Map<User>
 }
 ```
 
