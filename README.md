@@ -1,9 +1,13 @@
 # graphql-proposal-custom-wrapper-type
 
-# custom wrappers:
+## Inro
 
-- custom wrypper types can be used as `Input` and `Output` types
-- custom wrapper has `kind`  `WRAPPER`
+```graphql
+wrapper NonEmpty a = [a]
+wrapper Set a = [a]
+wrapper Entry a = (ID!, a)
+wrapper Map a = [Entry a]
+```
 
 ## Syntax
 
@@ -13,6 +17,8 @@ wrapper Name<a> = [a]
 
 ### restrictions
 
+- custom wrypper can be used as `Input` and `Output` types
+- custom wrapper has `kind`  `WRAPPER`
 - wrapper type must one parameter `<a>`.
 
   e.g:
@@ -133,8 +139,6 @@ result:
 
 - we will extend `ofType` so that now it supports: `NON_NULL` ,`LIST` and `CUSTOM_WRAPPER`
 
-
-
 ```graphql
 type __Type {
   kind: __TypeKind!
@@ -156,13 +160,15 @@ type __Type {
   # INPUT_OBJECT only
   inputFields: [__InputValue!]
 
+  # For Wrappper Arguments
   wrapperTypes:[__Type]
-  # For Wrappers Only:  NON_NULL , LIST and CUSTOM_WRAPPER
+
+  # Wrappers Only:  NON_NULL , LIST, CUSTOM_WRAPPER
   ofType: __Type
 }
 ```
 
-### so with thi scema:
+### so with this schema:
 
 ```graphql
 wrapper Entry<a> = (ID!,a)
@@ -209,8 +215,8 @@ TODO:
                             "ofType": null
                           }
                       ]
-                    },
-                  ]
+                    }
+                  ],
                 "ofType":
                   {
                     "kind": "OBJECT",
@@ -230,33 +236,5 @@ TODO:
       "possibleTypes": null
     }
   }
-}
-```
-
-## examples:
-
-```graphql
-wrapper NonEmpty a = [a]
-wrapper Set a = [a]
-wrapper Map a = [Entry a]
-wrapper Entry a = (ID!, a)
-```
-
-```graphql
-wrapper NonEmpty a =  [a]
-wrapper Set a = [a]
-
-input MyInput {
-  nonempty: NonEmpty<Int!>!
-  set: Set<Int!>!
-  list: [int!]!
-  map: Map<String!,Int!>!
-}
-
-type MyOutput {
-  nonempty: NonEmpty<Int!>!
-  set: Set<Int!>!
-  list: [int!]!
-  map: Map<String!,Int!>!
 }
 ```
