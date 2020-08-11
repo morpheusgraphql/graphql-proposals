@@ -171,7 +171,7 @@ type __Type {
 }
 ```
 
-### so with this schema:
+### example Schema
 
 ```graphql
 wrapper Entry<a> = (ID!,a)
@@ -179,10 +179,11 @@ wrapper Map<a> =  [Entry<a>]
 
 type User {
   name: String
+  age: Int
 }
 
 type Query {
-  users : Map<String>
+  users : Map<User>
 }
 ```
 
