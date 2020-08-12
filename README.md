@@ -181,8 +181,8 @@ type __Type {
   # INPUT_OBJECT only
   inputFields: [__InputValue!]
 
-  # For Wrappper Arguments
-  wrapperTypes: [__Type!]
+  # For Wrappper Vector Arguments
+  vectorArguments: [__Type!]
 
   # Wrappers Only:  NON_NULL , LIST, CUSTOM_WRAPPER
   ofType: __Type
@@ -214,7 +214,7 @@ type Query {
       "name": "Entry",
       "kind": "WRAPPER",
       "fields": null,
-      "wrapperTypes": [
+      "vectorArguments": [
         {
           "kind": "NON_NULL",
           "name": null,
@@ -246,7 +246,7 @@ type Query {
       "name": "Map",
       "kind": "WRAPPER",
       "fields": null,
-      "wrapperTypes": null,
+      "vectorArguments": null,
       "ofType": {
         "kind": "LIST",
         "name": null,
