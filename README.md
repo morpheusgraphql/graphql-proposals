@@ -8,9 +8,10 @@ wrapper Name<a> = [a]
 
 - WrapperDefinition:
 
-  - Description(opt) __wrapper__ Name **<** Name **>** = WrapperDefinitionBody
+  - Description(opt) **wrapper** Name **<** Name **>** = WrapperDefinitionBody
 
 - WrapperDefinitionBody:
+
   - Name
   - [WrapperDefinitionBody]
   - ( VectorArgument(list), WrapperDefinitionBody)
@@ -25,6 +26,7 @@ wrapper Name<a> = [a]
 e.g
 
 ```graphql
+wrapper MyWrapper<a> = a
 wrapper NonEmpty<a> = [a]
 wrapper Set<a> = [a]
 wrapper Entry<a> = (ID!, a)
@@ -76,8 +78,6 @@ wrapper Map<a> = [Entry a]
 
 server must define serialization methods for wrappers.
 
-
-
 ```graphql
 wrapper NonEmpty<a> = [a]
 ```
@@ -86,16 +86,16 @@ wrapper NonEmpty<a> = [a]
 
 ```haskell
 class Wrapper wrapper where
-    fromList :: [Value] -> Either String wrapper
-    toList ::  wrapper -> [Value]
+    parseValue :: Value -> Either String wrapper
+    serialize ::  wrapper -> Value
 
 instance Wrapper (NonEmpty a) where
-   fromList x = ...
-   toList x =
+   parseValue x = ...
+   serialize x =
 
 instance Wrapper (a, b) where
-   fromList x = ...
-   toList x =
+   parseValue x = ...
+   serialize x =
 ```
 
 **js**
@@ -150,7 +150,7 @@ result:
     "users": [
       ["jkgadagiu", { "name": "Alex" }],
       ["t9t98z9on", { "name": "David" }],
-      ["87t8biuhou", { "name": "George" }]
+      ["87t8biuhn", { "name": "George" }]
     ]
   }
 }
