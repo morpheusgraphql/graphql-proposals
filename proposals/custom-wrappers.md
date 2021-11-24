@@ -1,5 +1,7 @@
 # custom-wrapper-type
 
+warning: this is draft
+
 ## Syntax
 
 ```graphql
@@ -119,8 +121,8 @@ const resolverMap = {
 parameter 'a' can be selectited in selection.
 
 ```graphql
-wrapper Entry<a> = (ID!,a)
-wrapper Map<a> =  [Entry<a>]
+wrapper Set = (ID!, *)
+wrapper Map =  [ * ]
 
 type User {
   name: String
@@ -142,58 +144,14 @@ query:
 }
 ```
 
-result:
-
-```json
-{
-  "data": {
-    "users": [
-      ["jkgadagiu", { "name": "Alex" }],
-      ["t9t98z9on", { "name": "David" }],
-      ["87t8biuhn", { "name": "George" }]
-    ]
-  }
-}
-```
 
 ## Introspection
 
 - we will extend `ofType` so that now it supports: `NON_NULL` ,`LIST` and `CUSTOM_WRAPPER`
 
-```graphql
-type __Type {
-  kind: __TypeKind!
-  name: String
-  description: String
-
-  # OBJECT and INTERFACE only
-  fields(includeDeprecated: Boolean = false): [__Field!]
-
-  # OBJECT only
-  interfaces: [__Type!]
-
-  # INTERFACE and UNION only
-  possibleTypes: [__Type!]
-
-  # ENUM only
-  enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
-
-  # INPUT_OBJECT only
-  inputFields: [__InputValue!]
-
-  # For Wrappper Vector Arguments
-  vectorArguments: [__Type!]
-
-  # Wrappers Only:  NON_NULL , LIST, CUSTOM_WRAPPER
-  ofType: __Type
-}
-```
-
-### example Schema
 
 ```graphql
-wrapper Entry<a> = (ID!,a)
-wrapper Map<a> =  [Entry<a>]
+wrapper Map<a> =  [(ID!,a)]
 
 type User {
   name: String
