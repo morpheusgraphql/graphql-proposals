@@ -10,7 +10,7 @@ wrapper Name<a> = [a]
 
 - WrapperDefinition:
 
-  - Description(opt) **wrapper** Name **<** Name **>** = WrapperDefinitionBody
+  - Description(opt) **wrapper** Name < Name > = WrapperDefinitionBody
 
 - WrapperDefinitionBody:
 
@@ -37,35 +37,25 @@ wrapper Map<a> = [Entry a]
 
 ### Semantics
 
-- custom wrypper can be used as `Input` and `Output` types
+- custom wrapper can be used as `Input` and `Output` types
 - custom wrapper has `kind` `WRAPPER`
 - wrapper type must one parameter `<a>`.
 
   e.g:
 
   ```graphql
-  wrapper mywrapper<a> = [Int] #valid
-  wrapper mywrapper = [Int] # invalid
-  wrapper mywrapper<a,b> = [a] #invalid
+  wrapper wrapper1<a> = [Int] #valid
+  wrapper wrapper2 = [Int] # invalid
+  wrapper wrapper3<a,b> = [a] #invalid
   ```
 
-- wrapper parameters `<a>` can't be wrappped as NonNull("!").
+- wrapper parameters `<a>` can't be wrapped as NonNull("!").
 
   e.g:
 
   ```graphql
-  wrapper mywrapper<a> = [a!] # invalid
-  wrapper mywrapper<a> = [a] # valid
-  ```
-
-- (a1,...,an) is a list with fixed size n.
-- parameter should be last argument of vector.
-
-  e.g: this wrapper is invalid!
-
-  ```graphql
-  wrapper MyWrapper1<a> = (a,ID!) # invalid
-  wrapper MyWrapper2<a> = (ID!, a) # valid
+  wrapper wrapper1<a> = [a!] # invalid
+  wrapper wrapper2<a> = [a] # valid
   ```
 
 - input and output types can't be used in wrapper.
@@ -84,24 +74,6 @@ server must define serialization methods for wrappers.
 wrapper NonEmpty<a> = [a]
 ```
 
-**haskell**
-
-```haskell
-class Wrapper wrapper where
-    parseValue :: Value -> Either String wrapper
-    serialize ::  wrapper -> Value
-
-instance Wrapper (NonEmpty a) where
-   parseValue x = ...
-   serialize x =
-
-instance Wrapper (a, b) where
-   parseValue x = ...
-   serialize x =
-```
-
-**js**
-
 ```js
 const fromList = xs => {}
 const toList = nonempty => [....]
@@ -116,86 +88,19 @@ const resolverMap = {
 }
 ```
 
-## Execution on Output Types
+## introspection
 
-parameter 'a' can be selectited in selection.
+<!-- we will extend `ofType` so that now it supports: `NON_NULL` ,`LIST`. -->
 
 ```graphql
-wrapper Set = (ID!, *)
-wrapper Map =  [ * ]
-
-type User {
-  name: String
-  age: Int
-}
+wrapper Set<a> = [a]
 
 type Query {
-  users : Map<User>
+  numbers : Set<ID!>
 }
 ```
 
-query:
-
-```graphql
-{
-  users {
-    name
-  }
-}
-```
-
-
-## Introspection
-
-- we will extend `ofType` so that now it supports: `NON_NULL` ,`LIST` and `CUSTOM_WRAPPER`
-
-
-```graphql
-wrapper Map<a> =  [(ID!,a)]
-
-type User {
-  name: String
-  age: Int
-}
-
-type Query {
-  users : Map<User>
-}
-```
-
-#### introspection for `Entry`
-
-```json
-{
-  "data": {
-    "__type": {
-      "name": "Entry",
-      "kind": "WRAPPER",
-      "fields": null,
-      "vectorArguments": [
-        {
-          "kind": "NON_NULL",
-          "name": null,
-          "ofType": [
-            {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            }
-          ]
-        }
-      ],
-      "ofType": null,
-      "inputFields": null,
-      "interfaces": [],
-      "enumValues": null,
-      "possibleTypes": null
-    }
-  }
-}
-```
-
-#### introspection for `Map`
+### Set
 
 ```json
 {
@@ -208,11 +113,7 @@ type Query {
       "ofType": {
         "kind": "LIST",
         "name": null,
-        "ofType": {
-          "kind": "WRAPPER",
-          "name": "Entry",
-          "ofType": null
-        }
+        "ofType": null
       },
       "inputFields": null,
       "interfaces": [],
@@ -223,7 +124,7 @@ type Query {
 }
 ```
 
-#### introspection for `Query`
+### `Query`
 
 ```json
 {
@@ -233,14 +134,14 @@ type Query {
       "kind": "OBJECT",
       "fields": [
         {
-          "name": "users",
+          "name": "numbers",
           "args": [],
           "type": {
             "kind": "WRAPPER",
-            "name": "Map",
+            "name": "Set",
             "ofType": {
-              "kind": "OBJECT",
-              "name": "User",
+              "kind": "SCALAR",
+              "name": "ID",
               "ofType": null
             }
           },
