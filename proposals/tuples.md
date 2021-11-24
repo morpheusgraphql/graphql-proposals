@@ -16,10 +16,8 @@
 ### Semantics
 
 - custom wrapper has `kind` `WRAPPER`
-- wrapper type must one parameter `<a>`.
-
 - a GraphQL tuple `(a₁,...,aₙ₋₁, Type)` is a list with fixed size n.
-- since only the last parameter can be a output type, selections will be applied to it. for example for following schema:
+- since only the last parameter can be a output type, selections will be applied to it. for example API with following schema on query `{ users { name } }`:
 
 __users.gql__
 
@@ -34,13 +32,7 @@ type Query {
 }
 ```
 
-query:
-
-```graphql
-{ users { name } }
-```
-
-result:
+will return:
 
 ```json
 {
