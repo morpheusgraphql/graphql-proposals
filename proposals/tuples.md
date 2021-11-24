@@ -28,7 +28,7 @@ type User {
 }
 
 type Query {
-  users : [(ID!,a)]
+  users : [(ID!, User)]
 }
 ```
 
